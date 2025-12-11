@@ -18,15 +18,18 @@ use const OPENSSL_RAW_DATA;
 use function base64_decode;
 use function base64_encode;
 use function is_array;
+use function mb_substr;
 use function openssl_decrypt;
 use function openssl_encrypt;
 use function random_bytes;
 use function serialize;
-use function substr;
 use function throw_if;
 use function throw_unless;
 use function unserialize;
 
+/**
+ * @author Brian Faust <brian@cline.sh>
+ */
 final class ArrayValue implements SecretValue
 {
     /** @var array<array-key, mixed> */
@@ -90,9 +93,9 @@ final class ArrayValue implements SecretValue
 
         throw_if($data === false, RuntimeException::class, 'Base64 decoding failed');
 
-        $iv = substr($data, 0, 16);
-        $tag = substr($data, 16, 16);
-        $ciphertext = substr($data, 32);
+        $iv = mb_substr($data, 0, 16);
+        $tag = mb_substr($data, 16, 16);
+        $ciphertext = mb_substr($data, 32);
 
         $decrypted = openssl_decrypt(
             $ciphertext,

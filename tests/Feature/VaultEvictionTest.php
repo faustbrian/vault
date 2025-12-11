@@ -24,7 +24,7 @@ describe('Vault Eviction', function (): void {
     describe('TimeBasedPolicy eviction', function (): void {
         test('evicts entries older than policy threshold', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new TimeBasedPolicy(1);
             $vault->put('temp', 'value', null, $policy);
 
@@ -40,7 +40,7 @@ describe('Vault Eviction', function (): void {
 
         test('does not evict entries within policy threshold', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new TimeBasedPolicy(3_600);
             $vault->put('temp', 'value', null, $policy);
 
@@ -54,7 +54,7 @@ describe('Vault Eviction', function (): void {
 
         test('get automatically evicts expired entry', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new TimeBasedPolicy(1);
             $vault->put('temp', 'value', null, $policy);
 
@@ -72,7 +72,7 @@ describe('Vault Eviction', function (): void {
     describe('AccessCountPolicy eviction', function (): void {
         test('evicts entry after max accesses reached', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new AccessCountPolicy(3);
             $vault->put('limited', 'value', null, $policy);
 
@@ -87,7 +87,7 @@ describe('Vault Eviction', function (): void {
 
         test('does not evict before max accesses', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new AccessCountPolicy(5);
             $vault->put('limited', 'value', null, $policy);
 
@@ -105,7 +105,7 @@ describe('Vault Eviction', function (): void {
     describe('AccessTimePolicy eviction', function (): void {
         test('evicts entry after idle period', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new AccessTimePolicy(1);
             $vault->put('idle', 'value', null, $policy);
 
@@ -122,7 +122,7 @@ describe('Vault Eviction', function (): void {
 
         test('does not evict recently accessed entry', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new AccessTimePolicy(3_600);
             $vault->put('active', 'value', null, $policy);
 
@@ -138,7 +138,7 @@ describe('Vault Eviction', function (): void {
 
         test('does not evict never-accessed entry', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new AccessTimePolicy(1);
             $vault->put('untouched', 'value', null, $policy);
 
@@ -156,7 +156,7 @@ describe('Vault Eviction', function (): void {
     describe('CompositePolicy eviction', function (): void {
         test('OR policy evicts when any condition met', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new CompositePolicy([
                 new TimeBasedPolicy(1),
                 new AccessCountPolicy(10),
@@ -174,7 +174,7 @@ describe('Vault Eviction', function (): void {
 
         test('AND policy requires all conditions', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new CompositePolicy([
                 new TimeBasedPolicy(1),
                 new AccessCountPolicy(3),
@@ -195,7 +195,7 @@ describe('Vault Eviction', function (): void {
 
         test('AND policy evicts when all conditions met', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new CompositePolicy([
                 new TimeBasedPolicy(1),
                 new AccessCountPolicy(2),
@@ -218,7 +218,7 @@ describe('Vault Eviction', function (): void {
     describe('eviction events', function (): void {
         test('dispatches SecretValueEvicted event', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new TimeBasedPolicy(1);
             $vault->put('temp', 'value', null, $policy);
 
@@ -234,7 +234,7 @@ describe('Vault Eviction', function (): void {
 
         test('dispatches event for each evicted entry', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new TimeBasedPolicy(1);
             $vault->put('temp1', 'value1', null, $policy);
             $vault->put('temp2', 'value2', null, $policy);
@@ -254,7 +254,7 @@ describe('Vault Eviction', function (): void {
     describe('edge cases', function (): void {
         test('eviction handles entries without policy', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $vault->put('permanent', 'value');
 
             // Act
@@ -267,7 +267,7 @@ describe('Vault Eviction', function (): void {
 
         test('eviction handles mixed entries with and without policies', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new TimeBasedPolicy(1);
 
             $vault->put('temp', 'value', null, $policy);
@@ -286,7 +286,7 @@ describe('Vault Eviction', function (): void {
 
         test('has checks eviction policy before returning', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new TimeBasedPolicy(1);
             $vault->put('temp', 'value', null, $policy);
 
@@ -302,7 +302,7 @@ describe('Vault Eviction', function (): void {
 
         test('eviction deletes entry from database', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new TimeBasedPolicy(1);
             $vault->put('temp', 'value', null, $policy);
 

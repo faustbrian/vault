@@ -13,6 +13,7 @@ use Cline\Vault\Contracts\SecretValue;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Carbon;
@@ -36,9 +37,11 @@ use Illuminate\Support\Carbon;
  * @method static static|null             first()
  * @method static static                  updateOrCreate(array<string, mixed> $attributes, array<string, mixed> $values = [])
  * @method static Builder<static>         where(string $column, mixed $operator = null, mixed $value = null, string $boolean = 'and')
+ * @author Brian Faust <brian@cline.sh>
  */
 final class VaultEntry extends Model
 {
+    use HasFactory;
     use HasUlids;
 
     protected $fillable = [

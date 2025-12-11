@@ -19,7 +19,7 @@ uses(RefreshDatabase::class);
 describe('Vault Access Tracking', function (): void {
     test('increments access count on each get', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $vault->put('api_key', 'secret');
 
         // Act
@@ -34,7 +34,7 @@ describe('Vault Access Tracking', function (): void {
 
     test('updates last_accessed_at on each get', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $vault->put('api_key', 'secret');
 
         $entry = VaultEntry::query()->where('key', 'api_key')->first();
@@ -54,7 +54,7 @@ describe('Vault Access Tracking', function (): void {
     test('does not track access when disabled in config', function (): void {
         // Arrange
         Config::set('vault.track_access', false);
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $vault->put('api_key', 'secret');
 
         // Act
@@ -69,7 +69,7 @@ describe('Vault Access Tracking', function (): void {
 
     test('has does not increment access count', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $vault->put('api_key', 'secret');
 
         // Act
@@ -84,7 +84,7 @@ describe('Vault Access Tracking', function (): void {
 
     test('has does not update last_accessed_at', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $vault->put('api_key', 'secret');
 
         $entry = VaultEntry::query()->where('key', 'api_key')->first();
@@ -100,7 +100,7 @@ describe('Vault Access Tracking', function (): void {
 
     test('tracks access separately for different owners', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $user1 = User::query()->create(['name' => 'Alice', 'email' => 'alice@example.com']);
         $user2 = User::query()->create(['name' => 'Bob', 'email' => 'bob@example.com']);
 
@@ -126,7 +126,7 @@ describe('Vault Access Tracking', function (): void {
 
     test('access count starts at zero for new entry', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
 
         // Act
         $entry = $vault->put('api_key', 'secret');
@@ -137,7 +137,7 @@ describe('Vault Access Tracking', function (): void {
 
     test('last_accessed_at is null for new entry', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
 
         // Act
         $entry = $vault->put('api_key', 'secret');
@@ -148,7 +148,7 @@ describe('Vault Access Tracking', function (): void {
 
     test('updating entry resets access tracking', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $vault->put('api_key', 'old-secret');
         $vault->get('api_key');
         $vault->get('api_key');
@@ -163,7 +163,7 @@ describe('Vault Access Tracking', function (): void {
 
     test('access count persists across multiple accesses', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $vault->put('api_key', 'secret');
 
         // Act

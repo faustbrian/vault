@@ -9,6 +9,9 @@
 
 namespace Cline\Vault\Contracts;
 
+/**
+ * @author Brian Faust <brian@cline.sh>
+ */
 interface SecretValue
 {
     public static function supports(mixed $value): bool;

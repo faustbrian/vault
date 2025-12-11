@@ -11,6 +11,9 @@ namespace Cline\Vault\Contracts;
 
 use Cline\Vault\Models\VaultEntry;
 
+/**
+ * @author Brian Faust <brian@cline.sh>
+ */
 interface EvictionPolicy
 {
     public function shouldEvict(VaultEntry $entry): bool;

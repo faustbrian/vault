@@ -10,10 +10,15 @@
 namespace Tests\Fixtures;
 
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @author Brian Faust <brian@cline.sh>
+ */
 final class User extends Model
 {
+    use HasFactory;
     use HasUlids;
 
     protected $fillable = ['name', 'email'];

@@ -20,6 +20,7 @@ use function mb_strtolower;
 
 /**
  * @psalm-immutable
+ * @author Brian Faust <brian@cline.sh>
  */
 final readonly class CompositePolicy implements EvictionPolicy
 {

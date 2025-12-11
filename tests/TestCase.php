@@ -18,9 +18,8 @@ use function base64_encode;
 use function random_bytes;
 
 /**
- * @internal
- *
  * @author Brian Faust <brian@cline.sh>
+ * @internal
  */
 abstract class TestCase extends BaseTestCase
 {

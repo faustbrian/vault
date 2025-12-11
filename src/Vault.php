@@ -30,6 +30,7 @@ use function unserialize;
 
 /**
  * @psalm-immutable
+ * @author Brian Faust <brian@cline.sh>
  */
 final readonly class Vault
 {
@@ -149,10 +150,12 @@ final readonly class Vault
         $evicted = 0;
 
         foreach ($entries as $entry) {
-            if ($this->shouldEvict($entry)) {
-                $this->evictEntry($entry);
-                ++$evicted;
+            if (!$this->shouldEvict($entry)) {
+                continue;
             }
+
+            $this->evictEntry($entry);
+            ++$evicted;
         }
 
         return $evicted;

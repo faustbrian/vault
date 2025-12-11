@@ -14,6 +14,9 @@ use RuntimeException;
 use function get_debug_type;
 use function sprintf;
 
+/**
+ * @author Brian Faust <brian@cline.sh>
+ */
 final class ValueTypeNotFoundException extends RuntimeException
 {
     public static function forValue(mixed $value): self

@@ -15,6 +15,7 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * @psalm-immutable
+ * @author Brian Faust <brian@cline.sh>
  */
 final readonly class SecretValueAccessed
 {

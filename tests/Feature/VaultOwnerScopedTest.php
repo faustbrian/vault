@@ -19,7 +19,7 @@ uses(RefreshDatabase::class);
 describe('Vault Owner-Scoped Operations', function (): void {
     test('stores value with owner', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $user = User::query()->create(['name' => 'John', 'email' => 'john@example.com']);
 
         // Act
@@ -37,7 +37,7 @@ describe('Vault Owner-Scoped Operations', function (): void {
 
     test('retrieves value for specific owner', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $user = User::query()->create(['name' => 'John', 'email' => 'john@example.com']);
         $vault->put('api_key', 'user-secret', $user);
 
@@ -50,7 +50,7 @@ describe('Vault Owner-Scoped Operations', function (): void {
 
     test('same key different owners store separately', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $user1 = User::query()->create(['name' => 'Alice', 'email' => 'alice@example.com']);
         $user2 = User::query()->create(['name' => 'Bob', 'email' => 'bob@example.com']);
 
@@ -66,7 +66,7 @@ describe('Vault Owner-Scoped Operations', function (): void {
 
     test('same key with and without owner are separate', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $user = User::query()->create(['name' => 'John', 'email' => 'john@example.com']);
 
         // Act
@@ -81,7 +81,7 @@ describe('Vault Owner-Scoped Operations', function (): void {
 
     test('has returns true only for correct owner', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $user1 = User::query()->create(['name' => 'Alice', 'email' => 'alice@example.com']);
         $user2 = User::query()->create(['name' => 'Bob', 'email' => 'bob@example.com']);
         $vault->put('api_key', 'secret', $user1);
@@ -94,7 +94,7 @@ describe('Vault Owner-Scoped Operations', function (): void {
 
     test('forget only removes entry for specific owner', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $user1 = User::query()->create(['name' => 'Alice', 'email' => 'alice@example.com']);
         $user2 = User::query()->create(['name' => 'Bob', 'email' => 'bob@example.com']);
         $vault->put('api_key', 'alice-secret', $user1);
@@ -110,7 +110,7 @@ describe('Vault Owner-Scoped Operations', function (): void {
 
     test('owner relationship works correctly', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $user = User::query()->create(['name' => 'John', 'email' => 'john@example.com']);
         $entry = $vault->put('api_key', 'secret', $user);
 
@@ -125,7 +125,7 @@ describe('Vault Owner-Scoped Operations', function (): void {
 
     test('eviction respects owner scoping', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $user1 = User::query()->create(['name' => 'Alice', 'email' => 'alice@example.com']);
         $user2 = User::query()->create(['name' => 'Bob', 'email' => 'bob@example.com']);
         $policy = new TimeBasedPolicy(1);

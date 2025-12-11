@@ -14,6 +14,7 @@ use Cline\Vault\Models\VaultEntry;
 
 /**
  * @psalm-immutable
+ * @author Brian Faust <brian@cline.sh>
  */
 final readonly class TimeBasedPolicy implements EvictionPolicy
 {

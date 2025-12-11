@@ -19,6 +19,9 @@ use function sprintf;
 use function throw_unless;
 use function usort;
 
+/**
+ * @author Brian Faust <brian@cline.sh>
+ */
 final class ValueTypeRegistry
 {
     /** @var array<class-string<SecretValue>> */

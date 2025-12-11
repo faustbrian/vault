@@ -29,7 +29,7 @@ describe('Vault CRUD Operations', function (): void {
     describe('put', function (): void {
         test('stores string value in vault', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             Event::fake();
 
             // Act
@@ -47,7 +47,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('stores integer value in vault', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
 
             // Act
             $entry = $vault->put('user_id', 42);
@@ -59,7 +59,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('stores array value in vault', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $data = ['name' => 'John', 'email' => 'john@example.com'];
 
             // Act
@@ -72,7 +72,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('updates existing entry when key already exists', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $vault->put('api_key', 'old-value');
 
             // Act
@@ -86,7 +86,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('stores entry with eviction policy', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new TimeBasedPolicy(3_600);
 
             // Act
@@ -99,7 +99,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('stores entry without owner', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
 
             // Act
             $entry = $vault->put('global_key', 'value');
@@ -113,7 +113,7 @@ describe('Vault CRUD Operations', function (): void {
     describe('get', function (): void {
         test('retrieves stored string value', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $vault->put('api_key', 'secret-123');
 
             // Act
@@ -125,7 +125,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('retrieves stored integer value', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $vault->put('count', 42);
 
             // Act
@@ -137,7 +137,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('retrieves stored array value', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $data = ['foo' => 'bar', 'baz' => 123];
             $vault->put('data', $data);
 
@@ -150,7 +150,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('returns null for non-existent key', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
 
             // Act
             $value = $vault->get('non_existent');
@@ -161,7 +161,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('dispatches SecretValueAccessed event', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $vault->put('api_key', 'value');
             Event::fake();
 
@@ -174,7 +174,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('returns null for evicted entry', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new TimeBasedPolicy(1);
             $vault->put('temp', 'value', null, $policy);
 
@@ -191,7 +191,7 @@ describe('Vault CRUD Operations', function (): void {
     describe('has', function (): void {
         test('returns true for existing key', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $vault->put('api_key', 'value');
 
             // Act
@@ -203,7 +203,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('returns false for non-existent key', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
 
             // Act
             $exists = $vault->has('non_existent');
@@ -214,7 +214,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('returns false for evicted entry', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new TimeBasedPolicy(1);
             $vault->put('temp', 'value', null, $policy);
 
@@ -229,7 +229,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('does not increment access count', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $vault->put('api_key', 'value');
 
             // Act
@@ -245,7 +245,7 @@ describe('Vault CRUD Operations', function (): void {
     describe('forget', function (): void {
         test('deletes existing entry', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $vault->put('api_key', 'value');
 
             // Act
@@ -258,7 +258,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('returns false for non-existent key', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
 
             // Act
             $result = $vault->forget('non_existent');
@@ -269,7 +269,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('removes entry completely from database', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $vault->put('api_key', 'value');
 
             // Act
@@ -283,7 +283,7 @@ describe('Vault CRUD Operations', function (): void {
     describe('evict', function (): void {
         test('evicts expired entries', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new TimeBasedPolicy(1);
             $vault->put('temp1', 'value1', null, $policy);
             $vault->put('temp2', 'value2', null, $policy);
@@ -303,7 +303,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('returns zero when no entries to evict', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $vault->put('permanent', 'value');
 
             // Act
@@ -315,7 +315,7 @@ describe('Vault CRUD Operations', function (): void {
 
         test('dispatches SecretValueEvicted event for each evicted entry', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $policy = new TimeBasedPolicy(1);
             $vault->put('temp1', 'value1', null, $policy);
             $vault->put('temp2', 'value2', null, $policy);
@@ -334,7 +334,7 @@ describe('Vault CRUD Operations', function (): void {
     describe('error handling', function (): void {
         test('throws DecryptionFailedException for corrupted data', function (): void {
             // Arrange
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
             $vault->put('test', 'value');
 
             // Manually corrupt the encrypted value in database
@@ -350,7 +350,7 @@ describe('Vault CRUD Operations', function (): void {
         test('throws RuntimeException for missing encryption key', function (): void {
             // Arrange
             Config::set('vault.encryption_keys.default');
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
 
             // Act & Assert
             expect(fn () => $vault->put('test', 'value'))
@@ -369,7 +369,7 @@ describe('Vault CRUD Operations', function (): void {
         test('falls back to default key when config is not a string', function (): void {
             // Arrange
             Config::set('vault.default_encryption_key', 123); // Non-string value
-            $vault = app(Vault::class);
+            $vault = resolve(Vault::class);
 
             // Act
             $vault->put('test', 'value');

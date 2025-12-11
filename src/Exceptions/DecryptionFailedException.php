@@ -13,6 +13,9 @@ use RuntimeException;
 
 use function sprintf;
 
+/**
+ * @author Brian Faust <brian@cline.sh>
+ */
 final class DecryptionFailedException extends RuntimeException
 {
     public static function forKey(string $key): self

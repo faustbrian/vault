@@ -25,7 +25,7 @@ uses(RefreshDatabase::class);
 describe('Vault Integration - Full Workflow', function (): void {
     test('complete lifecycle: store, access, track, evict', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $policy = new AccessCountPolicy(3);
         Event::fake();
 
@@ -63,7 +63,7 @@ describe('Vault Integration - Full Workflow', function (): void {
 
     test('multi-user workflow with different policies', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $user1 = User::query()->create(['name' => 'Alice', 'email' => 'alice@example.com']);
         $user2 = User::query()->create(['name' => 'Bob', 'email' => 'bob@example.com']);
 
@@ -92,7 +92,7 @@ describe('Vault Integration - Full Workflow', function (): void {
 
     test('complex composite policy workflow', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $policy = new CompositePolicy([
             new TimeBasedPolicy(2),
             new AccessCountPolicy(3),
@@ -124,7 +124,7 @@ describe('Vault Integration - Full Workflow', function (): void {
 
     test('encryption and decryption with multiple value types', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
 
         // Act - Store different types
         $vault->put('string_key', 'Hello World');
@@ -150,7 +150,7 @@ describe('Vault Integration - Full Workflow', function (): void {
 
     test('concurrent eviction with manual and automatic triggers', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $policy = new TimeBasedPolicy(1);
 
         $vault->put('auto1', 'value1', null, $policy);
@@ -174,7 +174,7 @@ describe('Vault Integration - Full Workflow', function (): void {
 
     test('update existing entry preserves key but changes value', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $vault->put('api_key', 'old-secret');
         $vault->get('api_key');
         $vault->get('api_key');
@@ -194,7 +194,7 @@ describe('Vault Integration - Full Workflow', function (): void {
 
     test('stress test: multiple operations in sequence', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
 
         // Act - Rapid operations
         for ($i = 0; $i < 10; ++$i) {

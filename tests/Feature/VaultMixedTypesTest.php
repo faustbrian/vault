@@ -21,7 +21,7 @@ uses(RefreshDatabase::class);
 describe('Vault Mixed Value Types', function (): void {
     test('handles string values correctly', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $values = [
             'simple' => 'Hello',
             'empty' => '',
@@ -44,7 +44,7 @@ describe('Vault Mixed Value Types', function (): void {
 
     test('handles integer values correctly', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $values = [
             'zero' => 0,
             'positive' => 42,
@@ -67,7 +67,7 @@ describe('Vault Mixed Value Types', function (): void {
 
     test('handles array values correctly', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $values = [
             'empty' => [],
             'indexed' => [1, 2, 3, 4, 5],
@@ -97,7 +97,7 @@ describe('Vault Mixed Value Types', function (): void {
 
     test('handles object values as JSON', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $values = [
             'simple' => (object) ['key' => 'value'],
             'complex' => (object) [
@@ -122,7 +122,7 @@ describe('Vault Mixed Value Types', function (): void {
 
     test('maintains type integrity across multiple operations', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
 
         // Act - Store different types
         $vault->put('str', 'test');
@@ -144,7 +144,7 @@ describe('Vault Mixed Value Types', function (): void {
 
     test('handles type updates correctly', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
 
         // Act - Store as string
         $vault->put('dynamic', 'original');
@@ -166,7 +166,7 @@ describe('Vault Mixed Value Types', function (): void {
 
     test('all types can coexist in vault', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $user = User::query()->create(['name' => 'John', 'email' => 'john@example.com']);
 
         // Act - Store all types with different owners
@@ -192,7 +192,7 @@ describe('Vault Mixed Value Types', function (): void {
 
     test('encrypts different types with same key', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
 
         // Act
         $vault->put('str', 'secret');
@@ -214,7 +214,7 @@ describe('Vault Mixed Value Types', function (): void {
 
     test('handles edge case values', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
 
         // Act - Edge cases
         $vault->put('empty_string', '');
@@ -231,7 +231,7 @@ describe('Vault Mixed Value Types', function (): void {
 
     test('large value storage and retrieval', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
 
         // Act - Large values
         $largeString = str_repeat('A', 10_000);
@@ -247,7 +247,7 @@ describe('Vault Mixed Value Types', function (): void {
 
     test('special characters in string values', function (): void {
         // Arrange
-        $vault = app(Vault::class);
+        $vault = resolve(Vault::class);
         $specialStrings = [
             'quotes' => "It's a \"test\"",
             'newlines' => "Line 1\nLine 2\r\nLine 3",
